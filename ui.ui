@@ -9,24 +9,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
-    <height>75</height>
+    <width>415</width>
+    <height>80</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>380</width>
-    <height>75</height>
+    <width>415</width>
+    <height>80</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>380</width>
+    <width>415</width>
     <height>210</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>软件自动安装器 v3.5 By 冼叔叔</string>
+   <string>软件自动安装器 v3.1 By 冼叔叔</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="layoutWidget">
@@ -34,7 +34,7 @@
      <rect>
       <x>10</x>
       <y>180</y>
-      <width>341</width>
+      <width>391</width>
       <height>24</height>
      </rect>
     </property>
@@ -108,7 +108,7 @@
      <rect>
       <x>0</x>
       <y>2</y>
-      <width>381</width>
+      <width>415</width>
       <height>81</height>
      </rect>
     </property>
@@ -120,7 +120,7 @@
     </property>
     <property name="maximumSize">
      <size>
-      <width>381</width>
+      <width>415</width>
       <height>81</height>
      </size>
     </property>
@@ -184,6 +184,9 @@
            <bold>true</bold>
           </font>
          </property>
+         <property name="whatsThis">
+          <string comment="asdasd" extracomment="是否关闭系统自动更新"/>
+         </property>
          <property name="layoutDirection">
           <enum>Qt::RightToLeft</enum>
          </property>
@@ -220,6 +223,25 @@
          </property>
          <property name="autoRepeat">
           <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_3">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="text">
+          <string>经典菜单</string>
          </property>
         </widget>
        </item>
@@ -262,7 +284,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
+           <width>5</width>
            <height>20</height>
           </size>
          </property>
@@ -306,7 +328,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>361</width>
+      <width>391</width>
       <height>91</height>
      </rect>
     </property>
@@ -337,7 +359,7 @@
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>30</y>
        <width>361</width>
        <height>31</height>

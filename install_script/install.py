@@ -11,7 +11,7 @@ from script.kill_program import kill_program
 from script.txt_change import txt_change
 from script.format_menu import format_menu
 from script.install_from_png import install_from_png
-from script.system_info import system_info
+from script.system_version import sys_version
 from script.install_from_topwindow import install_from_topwindow
 from script.simple_install import simple_install
 
@@ -183,7 +183,8 @@ def install_QQ(choose, prom_name, menu_change, failure):
         join(getcwd(), 'app_pkg', 'QQ', 'QQ.exe'))
 
     if install(main_window=main_window[0], window_backend=main_window[1], step=step, program=program, install_path=join(choose, prom_name), edit_value=2):
-        system('taskkill /IM QQ.exe /F')
+        if kill_program(name='QQ.exe'):
+            system('taskkill /IM QQ.exe /F')
         txt_change(prom_name=prom_name,
                    menu_change=menu_change)  # 安装成功修改menu文件
     else:
@@ -272,7 +273,7 @@ def install_baidu_Netdisk(choose, prom_name, menu_change, failure, full_screen):
 
     Application().start(join(getcwd(), "app_pkg", prom_name, prom_name))  # 打开指定的安装程序
 
-    png_file_name = "_shot" if system_info() == "10" else "_shot_win7"
+    png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
     result = install_from_png(app_name=prom_name, edit_index=0, png_file_name=png_file_name,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
                               grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen)  # 采用全图片匹配
@@ -280,6 +281,7 @@ def install_baidu_Netdisk(choose, prom_name, menu_change, failure, full_screen):
         txt_change(prom_name=prom_name, menu_change=menu_change)
         sleep(2)
         if kill_program(name='BaiduNetdisk.exe'):
+            sleep(2)
             system('taskkill /IM BaiduNetdisk.exe /F')
     else:
         failure.extend(format_menu(prom_name.split()))
@@ -308,7 +310,7 @@ def install_Dtalk(choose, prom_name, menu_change, failure):
     step = {0: ["下一步(&N) >", 'click', 80],
             1: ["", 'edit', 6],
             2: ["下一步(&N) >", 'click', 6],
-            3: ["运行 钉钉(&R)", 'click', 40],
+            3: ["运行 钉钉(&R)", 'click', 60],
             4: ["完成(&F)", 'click', 6]}
 
     program = Application(backend=main_window[1]).start(
@@ -409,7 +411,7 @@ def install_WPS(choose, prom_name, menu_change, failure, full_screen):
     Application().start(join(getcwd(), "app_pkg", 'WPS',
                              'wpssetup_k56008174_281235.exe'))  # 打开指定的安装程序
 
-    png_file_name = "_shot" if system_info() == "10" else "_shot_win7"
+    png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
     result = install_from_png(app_name=prom_name, edit_index=2, png_file_name=png_file_name,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
                               grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen)  # 采用全图片匹配
@@ -653,7 +655,7 @@ def install_Xunlei(choose, prom_name, menu_change, failure, full_screen):
     skewing = [[-50, 0], [0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", prom_name, prom_name))  # 打开指定的安装程序
-    png_file_name = "_shot" if system_info() == "10" else "_shot_win7"
+    png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
     result = install_from_png(app_name=prom_name, edit_index=0, png_file_name=png_file_name,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
                               grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen)  # 采用全图片匹配
@@ -672,7 +674,7 @@ def install_SogouPY(choose, prom_name, menu_change, failure, full_screen):
         70, 0], [0, 0], [0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", prom_name, prom_name))  # 打开指定的安装程序
-    png_file_name = "_shot" if system_info() == "10" else "_shot_win7"
+    png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
     result = install_from_png(app_name=prom_name, edit_index=3, png_file_name=png_file_name,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
                               grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='4.png')  # 采用全图片匹配

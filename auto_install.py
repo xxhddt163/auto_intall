@@ -10,9 +10,13 @@ from script.format_menu import format_menu
 from script.load_menu import load_menu
 from script.check_UAC import check_UAC
 from script.check_DPI import check_DPI
+from script.change_DPI import system_info, regedit_win7, regedit_win10
+from script.is_admin import is_admin
+from script.system_version import sys_version
 from playsound import playsound
 
 import sys
+import ctypes
 import warnings
 
 from winrt import _winrt        # 防止与New_Thread模块进程冲突报错OleInitialize() failed:
@@ -27,9 +31,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__(parent)
         self.setWindowIcon(QIcon('setup.ico'))
         desktop = QApplication.desktop()
+
         self.move(desktop.width()*0.03, desktop.height()
                   * 0.05)       # 设置窗口打开时在屏幕左上角
         self.setupUi(self)
+        
         self.path = self.lineEdit.text()  # 程序安装位置
         self.sec = 0        # 记录秒
         self.min = 0        # 记录分
@@ -37,10 +43,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.pushButton_clicked)            # 浏览按钮
         self.pushButton_2.clicked.connect(
             self.pushButton_2_clicked)        # 安装按钮
+        
         self.timer = QTimer()
         self.timer.timeout.connect(self.showtime)
+        
         self.menu = load_menu()
-        self.check = None       # 自动断网标识
+        self.network_shutdown = None       # 自动断网标识
+        self.check_system()
+
+        self.checkBox.setToolTip(
+            '安装程序时将自动断开所有网络，安装完毕后自动恢复')    # checkbox鼠标悬停提示
+        self.checkBox_2.setToolTip('关闭windows自动更新服务')
+        self.checkBox_3.setToolTip('恢复鼠标右键菜单至经典模式(仅Win11)')
 
     def showtime(self):
         """用label_3显示安装时间"""
@@ -91,26 +105,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
         if reply == QMessageBox.Ok:
             self.close()
-    
+
     def disable_update(self):   # 关闭系统更新服务
         if bool(self.checkBox_2.isChecked()):
-            for _ in ['NET STOP "wuauserv"','sc config "wuauserv" start= DISABLED']:
+            for _ in ['NET STOP "wuauserv"', 'sc config "wuauserv" start= DISABLED']:
                 system(_)
+
+    def classic_context_menu(self):     # 恢复win11经典开始菜单
+        if bool(self.checkBox_3.isChecked()):
+            system(
+                'reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f')
+
+    def check_system(self):
+        if sys_version() == '11':
+            self.checkBox_3.setEnabled(True)
 
     def pushButton_2_clicked(self):
         playsound(join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'))
-        self.check = bool(self.checkBox.isChecked())
+        self.network_shutdown = bool(self.checkBox.isChecked())
         self.disable_update()
+        self.classic_context_menu()
         self.checkBox.setVisible(False)     # 安装时将checkbox隐藏
         self.checkBox_2.setVisible(False)
+        self.checkBox_3.setVisible(False)
+        self.pushButton.setVisible(False)
+        self.pushButton_2.setVisible(False)
         self.path = self.lineEdit.text()
         self.check_directory()
-        self.install = New_Thread(self.path, screen_check, self.menu, self.check)
+        self.install = New_Thread(
+            self.path, screen_check, self.menu, self.network_shutdown)
         self.lineEdit.setEnabled(False)
-        self.pushButton.setEnabled(False)
-        self.pushButton_2.setEnabled(False)
-        self.setMaximumSize(QtCore.QSize(380, 210))
-        self.resize(380, 210)
+        self.setMaximumSize(QtCore.QSize(415, 210))
+        self.resize(415, 210)
         self.starttime()
         self.install.program_name.connect(self.change_program)
         self.install.start()
@@ -130,27 +156,44 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 if __name__ == '__main__':
-    if check_UAC():     # 检查UAC是否关闭
+    if is_admin():
+        UAC = True
+        if check_UAC():     # 检查UAC是否关闭
+            UAC = False
+            app = QApplication(sys.argv)
+            QMessageBox.warning(
+                None,
+                "UAC未关闭",
+                "程序将自动并关闭UAC与防火墙并重启，重启后请重新打开本软件",
+                QMessageBox.Ok,
+            )
+            for _ in ['netsh advfirewall set allprofiles state off', 'reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 0 /f']:
+                system(_)
+
+        DPI = True
+        if check_DPI() != 96:       # 检查显示DPI是否设置为100
+            DPI = False
+            if system_info() == '7':
+                regedit_win7()
+            elif system_info() == '10':
+                regedit_win10()
+
+            app2 = QApplication(sys.argv)
+            QMessageBox.warning(
+                None,
+                "DPI显示比例未设置",
+                "程序将自动设置DPI并重启，重启后请重新打开本软件",
+                QMessageBox.Ok,
+            )
+
+        if not UAC or not DPI:      # 任何一个选项不符合都要重启
+            system('shutdown -r -t 1')
+            sys.exit(0)
+        screen_check = size().width < 1600
         app = QApplication(sys.argv)
-        QMessageBox.warning(
-            None,
-            "UAC未关闭",
-            "程序将自动并关闭UAC与防火墙并重启，重启后请重新打开本软件",
-            QMessageBox.Ok,
-        )
-        for _ in ['netsh advfirewall set allprofiles state off', 'reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 0 /f', 'shutdown -r -t 1']:
-            system(_)
-    if check_DPI() != 96:       # 检查显示DPI是否设置为100
-        app = QApplication(sys.argv)
-        QMessageBox.warning(
-            None,
-            "DPI显示比例未设置",
-            "请将显示比例改为100%，注销后重新打开本程序，修改方法：桌面右键->显示设置->缩放与布局",
-            QMessageBox.Ok,
-        )
-        sys.exit(0)
-    screen_check = size().width < 1600
-    app = QApplication(sys.argv)
-    mainWindow = MainWindow()
-    mainWindow.show()
-    app.exec_()
+        mainWindow = MainWindow()
+        mainWindow.show()
+        app.exec_()
+    else:
+        ctypes.windll.shell32.ShellExecuteW(
+            None, "runas", sys.executable, __file__, None, 1)

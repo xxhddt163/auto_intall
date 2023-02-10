@@ -6,7 +6,7 @@ from pyautogui import click, tripleClick, hotkey
 from pyperclip import paste, copy
 from script.simple_install import simple_install
 from time import sleep
-from script.system_info import system_info
+from script.system_version import sys_version
 
 def cra_3dmax(install_dir: str,
               program_name: str) -> None:
@@ -34,7 +34,7 @@ def cra_3dmax(install_dir: str,
     grayscale = [True, False, True, True, True]  # 各图片是否使用灰度搜索
     skewing = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]  # x、y坐标偏移
     
-    png_file_name = "_shot1" if system_info() == "10" else "_shot1_win7"
+    png_file_name = "_shot1" if sys_version() in ["10", "11"] else "_shot1_win7"
     
     if install_from_png(app_name=program_name, confidence=0.8, sleep_time_list=sleep_time, grayscale_list=grayscale,
                         skewing_list=skewing, png_file_name=png_file_name):  # 点击同意协议一直到复制申请号的界面
@@ -42,7 +42,7 @@ def cra_3dmax(install_dir: str,
         sleep_time = [10, 15]  # 各图片的等待时间
         grayscale = [True, True]  # 各图片是否使用灰度搜索
         skewing = [[200, 0], [0, 0]]  # x、y坐标偏移
-        png_file_name = "_shot2" if system_info() == "10" else "_shot2_win7"
+        png_file_name = "_shot2" if sys_version() in ["10", "11"] else "_shot2_win7"
         coordinate_list = install_from_png(app_name=program_name, confidence=0.8, sleep_time_list=sleep_time,
                                            grayscale_list=grayscale, skewing_list=skewing, png_file_name=png_file_name,
                                            coordinate=True)
