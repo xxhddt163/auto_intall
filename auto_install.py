@@ -187,8 +187,11 @@ if __name__ == '__main__':
             )
 
         if not UAC or not DPI:      # 任何一个选项不符合都要重启
-            system('shutdown -r -t 1')
-            sys.exit(0)
+            reply = QMessageBox.information(None,'UAC或DPI未设置正确', '立即重启(Yes),无视错误继续运行(No)',QMessageBox.Yes,QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                system('shutdown -r -t 1')
+                sys.exit(0)
+                
         screen_check = size().width < 1600
         app = QApplication(sys.argv)
         mainWindow = MainWindow()
