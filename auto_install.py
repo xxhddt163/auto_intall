@@ -1,3 +1,4 @@
+import contextlib
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog
@@ -11,7 +12,6 @@ from script.load_menu import load_menu
 from script.check_UAC import check_UAC
 from script.check_DPI import check_DPI
 from script.change_DPI import system_info, regedit_win7, regedit_win10
-from script.is_admin import is_admin
 from script.system_version import sys_version
 from playsound import playsound
 
@@ -35,7 +35,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.move(desktop.width()*0.03, desktop.height()
                   * 0.05)       # 设置窗口打开时在屏幕左上角
         self.setupUi(self)
-        
+
         self.path = self.lineEdit.text()  # 程序安装位置
         self.sec = 0        # 记录秒
         self.min = 0        # 记录分
@@ -43,10 +43,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.pushButton_clicked)            # 浏览按钮
         self.pushButton_2.clicked.connect(
             self.pushButton_2_clicked)        # 安装按钮
-        
+
         self.timer = QTimer()
         self.timer.timeout.connect(self.showtime)
-        
+
         self.menu = load_menu()
         self.network_shutdown = None       # 自动断网标识
         self.check_system()
@@ -121,7 +121,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.checkBox_3.setEnabled(True)
 
     def pushButton_2_clicked(self):
-        playsound(join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'))
+        with contextlib.suppress(Exception):
+            playsound(join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'))
         self.network_shutdown = bool(self.checkBox.isChecked())
         self.disable_update()
         self.classic_context_menu()
@@ -143,7 +144,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.install.failure.connect(self.failure)
 
     def pushButton_clicked(self):
-        playsound(join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'))
+        with contextlib.suppress(Exception):
+            playsound(join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'))
         _translate = QtCore.QCoreApplication.translate
         self.path = QFileDialog.getExistingDirectory(None, "选择程序安装路径")
         self.path = self.path.replace('/', '\\')
@@ -156,47 +158,44 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 if __name__ == '__main__':
-    if is_admin():
-        UAC = True
-        if check_UAC():     # 检查UAC是否关闭
-            UAC = False
-            app = QApplication(sys.argv)
-            QMessageBox.warning(
-                None,
-                "UAC未关闭",
-                "程序将自动并关闭UAC与防火墙并重启，重启后请重新打开本软件",
-                QMessageBox.Ok,
-            )
-            for _ in ['netsh advfirewall set allprofiles state off', 'reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 0 /f']:
-                system(_)
-
-        DPI = True
-        if check_DPI() != 96:       # 检查显示DPI是否设置为100
-            DPI = False
-            if system_info() == '7':
-                regedit_win7()
-            elif system_info() == '10':
-                regedit_win10()
-
-            app2 = QApplication(sys.argv)
-            QMessageBox.warning(
-                None,
-                "DPI显示比例未设置",
-                "程序将自动设置DPI并重启，重启后请重新打开本软件",
-                QMessageBox.Ok,
-            )
-
-        if not UAC or not DPI:      # 任何一个选项不符合都要重启
-            reply = QMessageBox.information(None,'UAC或DPI未设置正确', '立即重启(Yes),无视错误继续运行(No)',QMessageBox.Yes,QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                system('shutdown -r -t 1')
-                sys.exit(0)
-                
-        screen_check = size().width < 1600
+    UAC = True
+    if check_UAC():     # 检查UAC是否关闭
+        UAC = False
         app = QApplication(sys.argv)
-        mainWindow = MainWindow()
-        mainWindow.show()
-        app.exec_()
-    else:
-        ctypes.windll.shell32.ShellExecuteW(
-            None, "runas", sys.executable, __file__, None, 1)
+        QMessageBox.warning(
+            None,
+            "UAC未关闭",
+            "程序将自动并关闭UAC与防火墙并重启，重启后请重新打开本软件",
+            QMessageBox.Ok,
+        )
+        for _ in ['netsh advfirewall set allprofiles state off', 'reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 0 /f']:
+            system(_)
+
+    DPI = True
+    if check_DPI() != 96:       # 检查显示DPI是否设置为100
+        DPI = False
+        if system_info() == '7':
+            regedit_win7()
+        elif system_info() == '10':
+            regedit_win10()
+
+        app2 = QApplication(sys.argv)
+        QMessageBox.warning(
+            None,
+            "DPI显示比例未设置",
+            "程序将自动设置DPI并重启，重启后请重新打开本软件",
+            QMessageBox.Ok,
+        )
+
+    if not UAC or not DPI:      # 任何一个选项不符合都要重启
+        reply = QMessageBox.information(
+            None, 'UAC或DPI未设置正确', '立即重启(Yes),无视错误继续运行(No)', QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            system('shutdown -r -t 1')
+            sys.exit(0)
+
+    screen_check = size().width < 1600
+    app = QApplication(sys.argv)
+    mainWindow = MainWindow()
+    mainWindow.show()
+    app.exec_()
