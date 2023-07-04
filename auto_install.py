@@ -11,7 +11,7 @@ from script.format_menu import format_menu
 from script.load_menu import load_menu
 from script.check_UAC import check_UAC
 from script.check_DPI import check_DPI
-from script.change_DPI import system_info, regedit_win7, regedit_win10
+from script.change_DPI import system_info, regedit_win7, regedit_win10, restore_DPI
 from script.system_version import sys_version
 from playsound import playsound
 
@@ -100,11 +100,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             reply = QMessageBox.information(
                 self,
                 "程序运行完毕",
-                "所有程序成功安装,点击ok按钮关闭本程序",
+                "所有程序成功安装,关闭本程序并注销系统恢复DPI...",
                 QMessageBox.Ok,
             )
         if reply == QMessageBox.Ok:
-            self.close()
+            restore_DPI()
+            system('shutdown -l')
+            
 
     def disable_update(self):   # 关闭系统更新服务
         if bool(self.checkBox_2.isChecked()):

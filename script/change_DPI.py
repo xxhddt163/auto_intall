@@ -33,3 +33,9 @@ def regedit_win10():
                           r"Control Panel\Desktop",0,winreg.KEY_ALL_ACCESS)      
     winreg.SetValueEx(reg, "Win8DpiScaling",0, winreg.REG_DWORD, 1)
     
+
+def restore_DPI():
+    """修改Win8DpiScaling值为1即可关闭自定义缩放"""
+    reg = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                          r"Control Panel\Desktop",0,winreg.KEY_ALL_ACCESS)      
+    winreg.SetValueEx(reg, "Win8DpiScaling",0, winreg.REG_DWORD, 0)
