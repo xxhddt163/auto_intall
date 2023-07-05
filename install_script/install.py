@@ -15,7 +15,7 @@ from script.system_version import sys_version
 from script.install_from_topwindow import install_from_topwindow
 from script.simple_install import simple_install
 
-from crack.office2013_cra import office_crack
+from crack.office2021LTSC_cra import office2021LTSC_crack
 from crack.pscc2019_cra import ps_crack
 from crack.max2014_cra import cra_3dmax
 from crack.cad2007_cra import cad2007_cra
@@ -180,7 +180,7 @@ def install_QQ(choose, prom_name, menu_change, failure):
             5: ["完成安装", 'click', 60]}
 
     program = Application(backend=main_window[1]).start(
-        join(getcwd(), 'app_pkg', 'QQ', 'QQ.exe'))
+        join(getcwd(),'../', 'app_pkg', 'QQ', 'QQ.exe'))
 
     if install(main_window=main_window[0], window_backend=main_window[1], step=step, program=program, install_path=join(choose, prom_name), edit_value=2):
         if kill_program(name='QQ.exe'):
@@ -384,13 +384,18 @@ def install_DVN(choose, prom_name, menu_change, failure):
         failure.extend(format_menu(prom_name.split()))  # 安装失败记录安装失败程序
 
 
-def intall_OFFICE2013(choose, prom_name, menu_change, failure, full_screen):
-    sleep_time = [20, 10, 10, 10, 10, 10, 300]  # 各图片的等待时间
-    grayscale = [True, True, True, True, True, True, True]  # 各图片是否使用灰度搜索
-    skewing = [[0, 0], [0, 0], [0, 0], [0, 0], [-200, 0], [0, 0], [0, 0]]  # x、y坐标偏移
+def intall_OFFICE2021LTSC(choose, prom_name, menu_change, failure, full_screen):
+    sleep_time = [300]  # 各图片的等待时间
+    grayscale = [True]  # 各图片是否使用灰度搜索
+    skewing = [[0, 0]]  # x、y坐标偏移
 
-    Application().start(join(getcwd(), "app_pkg", 'OFFICE2013',
-                             'setup.exe'))  # 打开指定的安装程序
+    setup_path = join(getcwd(), "app_pkg", prom_name, "office", "setup.bat")
+    copy(setup_path)
+    hotkey("win", "r")
+    sleep(2)
+    hotkey("ctrl", "v")
+    sleep(1)
+    hotkey("enter")
 
     png_file_name = "_shot"
     result = install_from_png(app_name=prom_name, edit_index=4, png_file_name=png_file_name,
@@ -398,7 +403,7 @@ def intall_OFFICE2013(choose, prom_name, menu_change, failure, full_screen):
                               grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='5.png')  # 采用全图片匹配
     if result:
         txt_change(prom_name=prom_name, menu_change=menu_change)
-        office_crack(choose)
+        office2021LTSC_crack()
     else:
         failure.extend(format_menu(prom_name.split()))
 

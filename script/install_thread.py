@@ -16,7 +16,7 @@ from script.set_network import Change_interface
 
 from install_script.install import install_3DMAX, install_CAD2014, install_CAD2007, install_T20, install_CAD2019
 from install_script.install import install_PSCC2019, install_PRCC2020, intall_163music, install_QQmusic, install_Kugou, install_Xunlei, install_SogouPY, install_cdr2020
-from install_script.install import install_DVN, intall_OFFICE2013, install_WPS, install_360drv, install_Chrome, install_Lensto, install_TXvideo, install_IQIYI, install_PSCS3
+from install_script.install import install_DVN, intall_OFFICE2021LTSC, install_WPS, install_360drv, install_Chrome, install_Lensto, install_TXvideo, install_IQIYI, install_PSCS3
 from install_script.install import install_QQ, install_AI2021, install_DC2021, install_ID2021, install_AECC2019, install_baidu_Netdisk, install_Wechat, install_Dtalk, install_Winrar
 
 from winrt import _winrt        # 防止OleInitialize() failed报错
@@ -59,7 +59,7 @@ class New_Thread(QThread):
                     'VCRedist': "install_DVN(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'DX': "install_DVN(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'NF3': "install_DVN(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
-                    'OFFICE2013': "intall_OFFICE2013(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
+                    'OFFICE2021LTSC': "intall_OFFICE2021LTSC(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'WPS': "install_WPS(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     '360drv': "install_360drv(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'Chrome': "install_Chrome(prom_name=each, menu_change=menu_change)",
