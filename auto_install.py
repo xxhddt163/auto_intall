@@ -89,7 +89,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.stoptime()
         _translate = QtCore.QCoreApplication.translate
         if len(_) != 0:
-            reply = QMessageBox.information(
+            reply1 = QMessageBox.information(
                 self,
                 "程序运行完毕",
                 f"程序运行完毕，安装失败的程序为：{','.join(_)}",
@@ -97,13 +97,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
         else:
             self.label_6.setText(_translate("MainWindow", "所有程序安装完毕"))
-            reply = QMessageBox.information(
+            reply2 = QMessageBox.information(
                 self,
                 "程序运行完毕",
                 "所有程序成功安装,关闭本程序并注销系统恢复DPI...",
                 QMessageBox.Ok,
             )
-        if reply == QMessageBox.Ok:
+        if reply2 == QMessageBox.Ok:
             restore_DPI()
             system('shutdown -l')
             

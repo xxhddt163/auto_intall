@@ -175,7 +175,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "软件自动安装器 v3.1 By 冼叔叔"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "软件自动安装器 v3.2 By 冼叔叔"))
         self.label_2.setText(_translate("MainWindow", "已用时间:"))
         self.label_3.setText(_translate("MainWindow", "0:00"))
         self.label_5.setText(_translate("MainWindow", "第 0 个 共 0 个"))
