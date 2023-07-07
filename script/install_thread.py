@@ -14,7 +14,7 @@ import os
 from script.set_network import Change_interface
 
 
-from install_script.install import install_3DMAX, install_CAD2014, install_CAD2007, install_T20, install_CAD2019
+from install_script.install import install_3DMAX, install_CAD2014, install_CAD2007, install_T20, install_CAD2019, install_CAD2020, install_Steam
 from install_script.install import install_PSCC2019, install_PRCC2020, intall_163music, install_QQmusic, install_Kugou, install_Xunlei, install_SogouPY, install_cdr2020
 from install_script.install import install_DVN, intall_OFFICE2021LTSC, install_WPS, install_360drv, install_Chrome, install_Lensto, install_TXvideo, install_IQIYI, install_PSCS3
 from install_script.install import install_QQ, install_AI2021, install_DC2021, install_ID2021, install_AECC2019, install_baidu_Netdisk, install_Wechat, install_Dtalk, install_Winrar
@@ -64,7 +64,7 @@ class New_Thread(QThread):
                     '360drv': "install_360drv(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'Chrome': "install_Chrome(prom_name=each, menu_change=menu_change)",
                     'Lensto': "install_Lensto(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
-                    'TXvideo': "install_TXvideo(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
+                    'TXvideo': "install_TXvideo(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'IQIYI': "install_IQIYI(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'PSCS3': "install_PSCS3(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'PSCC2019': "install_PSCC2019(prom_name=each, menu_change=menu_change)",
@@ -75,11 +75,13 @@ class New_Thread(QThread):
                     'Xunlei': "install_Xunlei(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'SougouPY': "install_SogouPY(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     # '2345pinyin':"install_2345PY(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
-                    '3DMAX2014': "install_3DMAX(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
+                    '3DMAX2020': "install_3DMAX(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'CAD2014': "install_CAD2014(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'CAD2019': "install_CAD2019(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
+                    'CAD2020': "install_CAD2020(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'CAD2007': "install_CAD2007(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'T20': "install_T20(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
+                    'Steam': "install_Steam(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'cdr2020': "install_cdr2020(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)"
 
                 }[each])
