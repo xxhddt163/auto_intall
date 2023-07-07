@@ -17,11 +17,11 @@ from script.simple_install import simple_install
 
 from crack.office2021LTSC_cra import office2021LTSC_crack
 from crack.pscc2019_cra import ps_crack
-from crack.max2014_cra import cra_3dmax
+from crack.max2020_cra import cra_3dmax
 from crack.cad2007_cra import cad2007_cra
 from crack.t20_cra import t20_cra
 from crack.cad2019_cra import cad2019_cra
-
+from crack.cad2020_cra import cad2020_cra
 
 def install_CAD2019(choose, prom_name, menu_change, failure):
     step = {0: ["ListBox3", 'click', 30],
@@ -79,6 +79,60 @@ def install_CAD2019(choose, prom_name, menu_change, failure):
         system('taskkill /IM LMU.exe /F')
     else:
         failure.extend(format_menu(prom_name.split()))
+
+def install_CAD2020(choose, prom_name, menu_change, failure):
+    step = {0: ["ListBox3", 'click', 30],       # 在此计算机上安装
+            1: ["我接受Button", 'click', 6],
+            2: ["下一步Button", 'click', 6],
+            3: ["安装路径:Edit", join(choose, prom_name), 'edit', 6],
+            4: ["安装Button", 'click', 6]}
+
+    sleep_time = [5, 1, 1, 3, 1, 1, 1, 3, 2, 1]
+
+    setup_path = join(getcwd(), "app_pkg", 'CAD2020', "Setup.exe")
+    # startfile(setup_path)
+    copy(setup_path)
+    hotkey("win", "r")
+    sleep(2)
+    hotkey("ctrl", "v")
+    sleep(1)
+    hotkey("enter")
+
+    time = 20
+    while time >= 0:
+        try:
+            program = Application().connect(title="Autodesk® AutoCAD® 2020")
+        except:
+            sleep(1)
+            time -= 1
+        else:
+            break
+    if simple_install(window_backend='win32', step=step, program=program, sleep_time=sleep_time):
+        while True:
+            try:
+                temp = Application().connect(title_re='文件正在使用')
+                if temp.top_window().window(title='忽略(&I)').exists():
+                    temp.top_window()['忽略(&I)'].click_input()
+            except:
+                pass
+
+            if program.top_window().child_window(title="立即启动").exists():
+                program.top_window().child_window(title="立即启动").wait("ready", timeout=10)
+                program.top_window()['立即启动'].click_input()
+                txt_change(prom_name=prom_name, menu_change=menu_change)
+                break
+            else:
+                sleep(3)
+        cad2020_cra()
+        sleep(3)
+        system('taskkill /IM acad.exe /F')
+        sleep(1)
+        system('taskkill /IM LMU.exe /F')
+    else:
+        failure.extend(format_menu(prom_name.split()))
+
+
+
 
 
 def install_cdr2020(choose, prom_name, menu_change, failure):
@@ -474,26 +528,25 @@ def install_Lensto(choose, prom_name, menu_change, failure, full_screen):
         failure.extend(format_menu(prom_name.split()))
 
 
-def install_TXvideo(choose, prom_name, menu_change, failure, full_screen):
-    sleep_time = [10, 10, 10, 10, 300]  # 各图片的等待时间
-    grayscale = [True, True, True, False, True]  # 各图片是否使用灰度搜索
-    skewing = [[0, 0], [0, 0], [-200, 0], [0, 0], [0, 0]]  # x、y坐标偏移
+def install_TXvideo(choose, prom_name, menu_change, failure):
+    main_window = ["腾讯视频 2023 安装程序 ", "win32"]
+    step = {0: ["阅读并同意", 'click', 30],
+            1: ["自定义安装", 'click', 6],
+            2: ["", 'edit', 6],
+            3: ["立即安装", 'click', 8],
+            4: ["立即体验", 'click', 90]}
 
-    Application().start(join(getcwd(), "app_pkg", 'TXvideo',
-                             'TXvideo.exe'))  # 打开指定的安装程序
+    program = Application(backend=main_window[1]).start(
+        join(getcwd(), 'app_pkg', prom_name, prom_name))
 
-    png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
-    result = install_from_png(app_name=prom_name, edit_index=2, png_file_name=png_file_name,
-                              confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
-                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name=3)  # 采用全图片匹配
-    if result:
+    if install(main_window=main_window[0], window_backend=main_window[1], step=step, program=program,
+               install_path=join(choose, prom_name), edit_value=2):
+        # 安装成功修改menu文件
         txt_change(prom_name=prom_name, menu_change=menu_change)
-        sleep(2)
-        if kill_program(name='QQLive.exe'):
-            sleep(2)
-            system('taskkill /IM QQLive.exe /F')
+        sleep(1)
+        system('taskkill /IM "QQLive.exe" /F')
     else:
-        failure.extend(format_menu(prom_name.split()))
+        failure.extend(format_menu(prom_name.split()))  # 安装失败记录安装失败程序
 
 
 
@@ -696,19 +749,15 @@ def install_SogouPY(choose, prom_name, menu_change, failure, full_screen):
 
 
 def install_3DMAX(choose, prom_name, menu_change, failure):
-    step = {0: ["ListBox3", 'click', 30],
+    step = {0: ["ListBox3", 'click', 30],       # 在此计算机上安装
             1: ["我接受Button", 'click', 6],
             2: ["下一步Button", 'click', 6],
-            3: ["序列号:Edit", '666', 'edit', 6],
-            4: ["Edit2", '69696969', 'edit', 6],
-            5: ["产品密钥:Edit5", '128F1', 'edit', 6],
-            6: ["下一步Button", 'click', 6],
-            7: ["安装路径:Edit", join(choose, prom_name), 'edit', 6],
-            8: ["安装Button", 'click', 6]}
+            3: ["安装路径:Edit", join(choose, prom_name), 'edit', 6],
+            4: ["安装Button", 'click', 6]}
 
-    sleep_time = [3, 1, 1, 0.5, 0.5, 0.5, 1, 1, 1]
+    sleep_time = [5, 1, 1, 3, 1, 1, 1, 3, 2, 1]
 
-    setup_path = join(getcwd(), "app_pkg", prom_name, "Setup.exe")
+    setup_path = join(getcwd(), "app_pkg", '3DMAX2020', "Setup.exe")
     # startfile(setup_path)
     copy(setup_path)
     hotkey("win", "r")
@@ -720,7 +769,7 @@ def install_3DMAX(choose, prom_name, menu_change, failure):
     time = 20
     while time >= 0:
         try:
-            program = Application().connect(title="Autodesk 3ds Max 2014")
+            program = Application().connect(title="Autodesk 3ds Max 2020")
         except:
             sleep(1)
             time -= 1
@@ -735,16 +784,21 @@ def install_3DMAX(choose, prom_name, menu_change, failure):
             except:
                 pass
 
-            if program.top_window().child_window(title="完成").exists():
-                program.top_window().child_window(title="完成").wait("ready", timeout=10)
-                program.top_window()['完成'].click_input()
+            if program.top_window().child_window(title="立即启动").exists():
+                program.top_window().child_window(title="立即启动").wait("ready", timeout=10)
+                program.top_window()['立即启动'].click_input()
                 txt_change(prom_name=prom_name, menu_change=menu_change)
                 break
             else:
                 sleep(3)
-        cra_3dmax(choose, prom_name)
+        cra_3dmax()
+        sleep(3)
+        system('taskkill /IM 3dsmax.exe /F')
+        sleep(1)
+        system('taskkill /IM LMU.exe /F')
     else:
         failure.extend(format_menu(prom_name.split()))
+    
 
 
 def install_CAD2014(choose, prom_name, menu_change, failure):
@@ -888,7 +942,38 @@ def install_T20(choose, prom_name, menu_change, failure):
                 time -= 1
         step = {0: ["完成Button", 'click', 10]}
         if simple_install(window_backend="win32", step=step, program=program):
-            t20_cra(choose)
+            t20_cra()
+            txt_change(prom_name=prom_name, menu_change=menu_change)
+    else:
+        failure.extend(format_menu(prom_name.split()))
+        
+def install_Steam(choose, prom_name, menu_change, failure):
+    program = Application().start(join(getcwd(), "app_pkg", prom_name, 'SteamSetup.exe'))
+    time = 20
+    while time >= 0:
+        if program.top_window()["下一步(&N) >"].exists():
+            break
+        sleep(1)
+        time -= 1
+
+    step = {0: ["下一步(&N) >", 'click', 10],
+            1: ["下一步(&N) >", 'click', 6],
+            2: ["目标文件夹Edit", join(choose, prom_name), 'edit', 6],
+            3: ["安装(&I)Button", 'click', 6],
+            }
+    sleep_time = [0, 2, 1, 10]
+    if simple_install(window_backend="win32", step=step, program=program, sleep_time=sleep_time):
+        time = 60
+        while time >= 0:
+            try:
+                if program.top_window()['运行 Steam(&R)CheckBox'].exists():
+                    break
+            except:
+                sleep(1)
+                time -= 1
+        step = {0: ["运行 Steam(&R)CheckBox", 'click', 10],
+                1: ["完成(&F)Button", 'click', 10]}
+        if simple_install(window_backend="win32", step=step, program=program):
             txt_change(prom_name=prom_name, menu_change=menu_change)
     else:
         failure.extend(format_menu(prom_name.split()))
