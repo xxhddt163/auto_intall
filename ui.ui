@@ -26,7 +26,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>软件自动安装器 v3.1 By 冼叔叔</string>
+   <string>软件自动安装器 v3.2By 冼叔叔</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="layoutWidget">
@@ -147,13 +147,6 @@
         </widget>
        </item>
        <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QLineEdit" name="lineEdit">
          <property name="font">
           <font>
@@ -164,6 +157,32 @@
          <property name="text">
           <string>D:\Program Files</string>
          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>静默安装</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>装完提示</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>装完关机</string>
+          </property>
+         </item>
         </widget>
        </item>
       </layout>
@@ -284,7 +303,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>5</width>
+           <width>14</width>
            <height>20</height>
           </size>
          </property>

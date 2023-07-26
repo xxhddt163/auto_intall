@@ -14,6 +14,7 @@ from script.check_DPI import check_DPI
 from script.change_DPI import system_info, regedit_win7, regedit_win10, restore_DPI
 from script.system_version import sys_version
 from playsound import playsound
+import threading
 
 import sys
 import ctypes
@@ -85,6 +86,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.label_5.setText(_translate(
             "MainWindow", f"第 {self.menu.index(_) + 1} 个 共 {len(self.menu)} 个"))
 
+    def play_finish_sound(self):
+        while True:
+            playsound(join(getcwd(), 'app_pkg', 'sound', 'finish.wav'))
+            
+
     def failure(self, _):
         self.stoptime()
         _translate = QtCore.QCoreApplication.translate
@@ -96,6 +102,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 QMessageBox.Ok,
             )
         else:
+            if self.comboBox.currentText() == "装完提示":
+                play = threading.Thread(target=self.play_finish_sound, args=())
+                play.start()
+
+            if self.comboBox.currentText() == "装完关机":
+                system('shutdown -s -t 1')
+
             self.label_6.setText(_translate("MainWindow", "所有程序安装完毕"))
             reply2 = QMessageBox.information(
                 self,
@@ -106,7 +119,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if reply2 == QMessageBox.Ok:
             restore_DPI()
             system('shutdown -l')
-            
 
     def disable_update(self):   # 关闭系统更新服务
         if bool(self.checkBox_2.isChecked()):
@@ -124,7 +136,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def pushButton_2_clicked(self):
         with contextlib.suppress(Exception):
-            playsound(join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'))
+            sound = threading.Thread(target=playsound, args=(
+                join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'),))
+            sound.start()
+
         self.network_shutdown = bool(self.checkBox.isChecked())
         self.disable_update()
         self.classic_context_menu()
@@ -133,6 +148,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.checkBox_3.setVisible(False)
         self.pushButton.setVisible(False)
         self.pushButton_2.setVisible(False)
+        self.comboBox.setVisible(False)
         self.path = self.lineEdit.text()
         self.check_directory()
         self.install = New_Thread(
@@ -147,7 +163,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def pushButton_clicked(self):
         with contextlib.suppress(Exception):
-            playsound(join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'))
+            sound = threading.Thread(target=playsound, args=(
+                join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'),))
+            sound.start()
+
         _translate = QtCore.QCoreApplication.translate
         self.path = QFileDialog.getExistingDirectory(None, "选择程序安装路径")
         self.path = self.path.replace('/', '\\')
