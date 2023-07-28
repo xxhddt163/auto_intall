@@ -22,6 +22,7 @@ from crack.cad2007_cra import cad2007_cra
 from crack.t20_cra import t20_cra
 from crack.cad2019_cra import cad2019_cra
 from crack.cad2020_cra import cad2020_cra
+from crack.cad2014_cra import cra_cad2014
 
 def install_CAD2019(choose, prom_name, menu_change, failure):
     step = {0: ["ListBox3", 'click', 30],
@@ -848,7 +849,7 @@ def install_CAD2014(choose, prom_name, menu_change, failure):
                 break
             else:
                 sleep(3)
-        cra_3dmax(choose, prom_name)
+        cra_cad2014(choose, prom_name)
     else:
         failure.extend(format_menu(prom_name.split()))
 
