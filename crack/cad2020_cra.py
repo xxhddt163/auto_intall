@@ -87,8 +87,14 @@ def cad2020_cra():
                             hotkey('tab')
                             sleep(.5)
                         hotkey('enter')
-                        sleep(1)
-                
+                        
+                        sleep_time = [10]  # 各图片的等待时间
+                        grayscale = [True]  # 各图片是否使用灰度搜索
+                        skewing = [[0, 0]]  # x、y坐标偏移
+                        png_file_name = "_shot4"
+                        
+                        install_from_png(app_name="CAD2020", confidence=0.8, sleep_time_list=sleep_time, grayscale_list=grayscale,
+                        skewing_list=skewing, png_file_name=png_file_name)
                         
                         
                         
