@@ -14,7 +14,7 @@ def office2021LTSC_crack() -> None:
     osbb_path = join(r'C:\Program Files\Microsoft Office\Office16')
     print(osbb_path)
     chdir(osbb_path)
-    system('cscript ospp.vbs /sethst:wanghuoyao.top')
+    system('cscript ospp.vbs /sethst:liuzidan.top')
     system('cscript ospp.vbs /setprt:9005')
     system('cscript ospp.vbs /act')
     chdir(old_path)

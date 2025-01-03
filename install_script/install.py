@@ -227,8 +227,8 @@ def install_QQ(choose, prom_name, menu_change, failure):
     """
     main_window = ["腾讯QQ安装向导", "win32", "QQ"]
     step = {0: ["自定义选项", 'click', 15],
-            1: ["添加到快速启动栏", 'click', 6],
-            # 2: ["开机自动启动", 'click', 6],      # 新版本QQ默认开机启动不勾选
+            # 1: ["添加到快速启动栏", 'click', 6],
+            1: ["开机自动启动", 'click', 6],      
             2: ['', 'edit', 6],
             3: ["阅读并同意", 'click', 6],
             4: ["立即安装", 'click', 6],
@@ -360,23 +360,21 @@ def install_Wechat(choose, prom_name, menu_change, failure, full_screen):
         failure.extend(format_menu(prom_name.split()))
 
 
-def install_Dtalk(choose, prom_name, menu_change, failure):
-    main_window = ["钉钉 安装", "win32"]
-    step = {0: ["下一步(&N) >", 'click', 80],
-            1: ["", 'edit', 6],
-            2: ["下一步(&N) >", 'click', 6],
-            3: ["运行 钉钉(&R)", 'click', 60],
-            4: ["完成(&F)", 'click', 6]}
+def install_Dtalk(choose, prom_name, menu_change, failure, full_screen):
+    sleep_time = [10, 10, 10, 10, 70, 10, 10, 10]  # 各图片的等待时间
+    grayscale = [True, True, True, False, False, False, False, False]  # 各图片是否使用灰度搜索
+    skewing = [[0, 0], [0, 0], [-300, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]  # x、y坐标偏移
 
-    program = Application(backend=main_window[1]).start(
-        join(getcwd(), 'app_pkg', 'Dtalk', 'Dtalk.exe'))
+    Application().start(join(getcwd(), 'app_pkg', 'Dtalk', 'Dtalk.exe'))  # 打开指定的安装程序
 
-    if install(main_window=main_window[0], window_backend=main_window[1], step=step,
-               program=program, install_path=join(choose, prom_name), edit_value=1):
-        # 安装成功修改menu文件
+    png_file_name = "_shot"
+    result = install_from_png(app_name=prom_name, edit_index=2, png_file_name=png_file_name,
+                              confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
+                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='3.png')  # 采用全图片匹配
+    if result:
         txt_change(prom_name=prom_name, menu_change=menu_change)
     else:
-        failure.extend(format_menu(prom_name.split()))  # 安装失败记录安装失败程序
+        failure.extend(format_menu(prom_name.split()))
 
 
 def install_Winrar(choose, prom_name, menu_change, failure):
@@ -465,20 +463,20 @@ def intall_OFFICE2021LTSC(choose, prom_name, menu_change, failure, full_screen):
 
 def install_WPS(choose, prom_name, menu_change, failure, full_screen):
     sleep_time = [30, 10, 10, 10]  # 各图片的等待时间
-    grayscale = [True, True, True, False]  # 各图片是否使用灰度搜索
-    skewing = [[-60, 0], [0, 0], [0, 20], [0, 0]]  # x、y坐标偏移
+    grayscale = [True, True, False, False]  # 各图片是否使用灰度搜索
+    skewing = [[0, 0], [0, 0], [-200, 0], [0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", 'WPS',
-                             'WPS_Setup_14309.exe'))  # 打开指定的安装程序
+                             'WPS_Setup_19770.exe'))  # 打开指定的安装程序
 
     png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
     result = install_from_png(app_name=prom_name, edit_index=2, png_file_name=png_file_name,
                               confidence=0.6, install_path=choose, sleep_time_list=sleep_time,
-                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen)  # 采用全图片匹配
+                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name= '2.png')  # 采用全图片匹配
     if result:
         txt_change(prom_name=prom_name, menu_change=menu_change)
         sleep(2)
-        if kill_program(name='wps.exe',count=120):
+        if kill_program(name='wps.exe',count=240):
             sleep(2)
             system('taskkill /IM wps.exe /F')
     else:
@@ -529,26 +527,26 @@ def install_Lensto(choose, prom_name, menu_change, failure, full_screen):
         failure.extend(format_menu(prom_name.split()))
 
 
-def install_TXvideo(choose, prom_name, menu_change, failure):
-    main_window = ["腾讯视频 2023 安装程序 ", "win32"]
-    step = {0: ["阅读并同意", 'click', 30],
-            1: ["自定义安装", 'click', 6],
-            2: ["", 'edit', 6],
-            3: ["立即安装", 'click', 8],
-            4: ["立即体验", 'click', 90]}
+def install_TXvideo(choose, prom_name, menu_change, failure, full_screen):
+    sleep_time = [10, 10, 10, 10, 50]  # 各图片的等待时间
+    grayscale = [True, True, True, False, False]  # 各图片是否使用灰度搜索
+    skewing = [[0, 0], [0, 0], [-200, 0], [0, 0], [0, 0]]  # x、y坐标偏移
 
-    program = Application(backend=main_window[1]).start(
-        join(getcwd(), 'app_pkg', prom_name, prom_name))
+    Application().start(join(getcwd(), "app_pkg", 'TXvideo',
+                             'TXvideo.exe'))  # 打开指定的安装程序
 
-    if install(main_window=main_window[0], window_backend=main_window[1], step=step, program=program,
-               install_path=join(choose, prom_name), edit_value=2):
-        # 安装成功修改menu文件
+    png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
+    result = install_from_png(app_name=prom_name, edit_index=2, png_file_name=png_file_name,
+                              confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
+                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='2.png')  
+    if result:
         txt_change(prom_name=prom_name, menu_change=menu_change)
-        sleep(1)
-        system('taskkill /IM "QQLive.exe" /F')
+        sleep(2)
+        if kill_program(name='QQLive.exe',count=240):
+            sleep(2)
+            system('taskkill /IM QQLive.exe /F')
     else:
-        failure.extend(format_menu(prom_name.split()))  # 安装失败记录安装失败程序
-
+        failure.extend(format_menu(prom_name.split()))
 
 
 def install_IQIYI(choose, prom_name, menu_change, failure):
@@ -655,14 +653,14 @@ def install_PRCC2020(choose, prom_name, menu_change, failure, full_screen):
 
 
 def intall_163music(choose, prom_name, menu_change, failure, full_screen):
-    sleep_time = [25, 10, 10, 10, 10, 60]  # 各图片的等待时间
-    grayscale = [True, True, True, True, True, True]  # 各图片是否使用灰度搜索
-    skewing = [[0, 0], [0, 0], [0, 0],
-               [-230, 0], [0, 0], [0, 0]]  # x、y坐标偏移
+    sleep_time = [25, 10, 10, 10, 10, 70]  # 各图片的等待时间
+    grayscale = [True, True, False, False, False, False]  # 各图片是否使用灰度搜索
+    skewing = [[0, 0], [-230, 0], [0, 0],
+               [0, 0], [0, 0], [0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", prom_name, prom_name))  # 打开指定的安装程序
 
-    result = install_from_png(app_name=prom_name, edit_index=3,
+    result = install_from_png(app_name=prom_name, edit_index=1,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
                               grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='4.png')  # 采用全图片匹配
     if result:
@@ -680,7 +678,7 @@ def install_QQmusic(choose, prom_name, menu_change, failure, full_screen):
                [0, 0], [0, 0], [0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", prom_name,
-                             'QQMusic_Setup_Home.exe'))  # 打开指定的安装程序
+                             'QQMusic_Setup_2102.exe'))  # 打开指定的安装程序
 
     result = install_from_png(app_name=prom_name, edit_index=2,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
@@ -694,16 +692,16 @@ def install_QQmusic(choose, prom_name, menu_change, failure, full_screen):
 
 
 def install_Kugou(choose, prom_name, menu_change, failure, full_screen):
-    sleep_time = [10, 10, 10, 10, 10, 10, 60]  # 各图片的等待时间
-    grayscale = [True, True, True, True,
-                 True, True, True]  # 各图片是否使用灰度搜索
-    skewing = [[0, 0], [0, 0], [0, 0], [0, 0],
-               [-250, 0], [0, 0], [0, 0]]  # x、y坐标偏移
+    sleep_time = [10, 10, 10, 10, 10, 60]  # 各图片的等待时间
+    grayscale = [True, True, False, False,
+                 False, False]  # 各图片是否使用灰度搜索
+    skewing = [[0, 0], [-250, 0], [0, 0], [0, 0],
+               [0, 0], [0, 0],]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", prom_name,
                              'kugou.exe'))  # 打开指定的安装程序
 
-    result = install_from_png(app_name=prom_name, edit_index=4,
+    result = install_from_png(app_name=prom_name, edit_index=1,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
                               grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='5.png')  # 采用全图片匹配
     if result:
@@ -735,7 +733,7 @@ def install_Xunlei(choose, prom_name, menu_change, failure, full_screen):
 def install_SogouPY(choose, prom_name, menu_change, failure, full_screen):
     sleep_time = [10, 10, 10, 10]  # 各图片的等待时间
     grayscale = [True, True, True, True]  # 各图片是否使用灰度搜索
-    skewing = [[0, 0], [0, 0], [-50, 0], [
+    skewing = [[0, 0], [0, 0], [-80, 0], [
         0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", prom_name, prom_name))  # 打开指定的安装程序

@@ -12,8 +12,6 @@ import traceback
 from PyQt5.QtWidgets import QApplication, QMessageBox
 import os
 from script.set_network import Change_interface
-
-
 from install_script.install import install_3DMAX, install_CAD2014, install_CAD2007, install_T20, install_CAD2019, install_CAD2020, install_Steam
 from install_script.install import install_PSCC2019, install_PRCC2020, intall_163music, install_QQmusic, install_Kugou, install_Xunlei, install_SogouPY, install_cdr2020
 from install_script.install import install_DVN, intall_OFFICE2021LTSC, install_WPS, install_360drv, install_Chrome, install_Lensto, install_TXvideo, install_IQIYI, install_PSCS3
@@ -54,7 +52,7 @@ class New_Thread(QThread):
                     'AECC2019': "install_AECC2019(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'baidu_Netdisk': "install_baidu_Netdisk(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'Wechat': "install_Wechat(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
-                    'Dtalk': "install_Dtalk(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
+                    'Dtalk': "install_Dtalk(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'Winrar': "install_Winrar(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'VCRedist': "install_DVN(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'DX': "install_DVN(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
@@ -64,7 +62,7 @@ class New_Thread(QThread):
                     '360drv': "install_360drv(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'Chrome': "install_Chrome(prom_name=each, menu_change=menu_change)",
                     'Lensto': "install_Lensto(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
-                    'TXvideo': "install_TXvideo(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
+                    'TXvideo': "install_TXvideo(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'IQIYI': "install_IQIYI(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'PSCS3': "install_PSCS3(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'PSCC2019': "install_PSCC2019(prom_name=each, menu_change=menu_change)",
@@ -87,6 +85,7 @@ class New_Thread(QThread):
                 }[each])
             if self.check_stat:
                 c.change_interface()        # 安装完程序后恢复网卡
+                
             self.failure.emit(failure)
         except Exception as e:
             if self.check_stat:
@@ -94,6 +93,7 @@ class New_Thread(QThread):
             logfile = os.path.join(os.getcwd(), 'error.log')        # 错误日志
             log = Logger(logfile).logger
             log.error(f"{e.args}:--->{traceback.format_exc()}")
+              
             app = QApplication(sys.argv)
             QMessageBox.warning(
                 None,

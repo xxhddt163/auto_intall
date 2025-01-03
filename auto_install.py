@@ -139,7 +139,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             sound = threading.Thread(target=playsound, args=(
                 join(getcwd(), 'app_pkg', 'sound', 'run_click.wav'),))
             sound.start()
-
+            
         self.network_shutdown = bool(self.checkBox.isChecked())
         self.disable_update()
         self.classic_context_menu()
