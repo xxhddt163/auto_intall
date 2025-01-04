@@ -472,7 +472,7 @@ def install_WPS(choose, prom_name, menu_change, failure, full_screen):
     png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
     result = install_from_png(app_name=prom_name, edit_index=2, png_file_name=png_file_name,
                               confidence=0.6, install_path=choose, sleep_time_list=sleep_time,
-                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name= '2.png')  # 采用全图片匹配
+                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen)  # 采用全图片匹配
     if result:
         txt_change(prom_name=prom_name, menu_change=menu_change)
         sleep(2)
@@ -538,7 +538,7 @@ def install_TXvideo(choose, prom_name, menu_change, failure, full_screen):
     png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
     result = install_from_png(app_name=prom_name, edit_index=2, png_file_name=png_file_name,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
-                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='2.png')  
+                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen)  
     if result:
         txt_change(prom_name=prom_name, menu_change=menu_change)
         sleep(2)
