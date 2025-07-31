@@ -462,16 +462,16 @@ def intall_OFFICE2021LTSC(choose, prom_name, menu_change, failure, full_screen):
 
 
 def install_WPS(choose, prom_name, menu_change, failure, full_screen):
-    sleep_time = [30, 10, 10, 10]  # 各图片的等待时间
-    grayscale = [True, True, False, False]  # 各图片是否使用灰度搜索
-    skewing = [[0, 0], [0, 0], [-200, 0], [0, 0]]  # x、y坐标偏移
+    sleep_time = [30, 10]  # 各图片的等待时间
+    grayscale = [True, True]  # 各图片是否使用灰度搜索
+    skewing = [[0, 0], [0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", 'WPS',
                              'WPS_Setup_19770.exe'))  # 打开指定的安装程序
 
     png_file_name = "_shot" if sys_version() in ["10", "11"] else "_shot_win7"
     result = install_from_png(app_name=prom_name, edit_index=2, png_file_name=png_file_name,
-                              confidence=0.6, install_path=choose, sleep_time_list=sleep_time,
+                              confidence=0.7, install_path=choose, sleep_time_list=sleep_time,
                               grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen)  # 采用全图片匹配
     if result:
         txt_change(prom_name=prom_name, menu_change=menu_change)
