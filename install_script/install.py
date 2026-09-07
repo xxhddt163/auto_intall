@@ -343,9 +343,9 @@ def install_baidu_Netdisk(choose, prom_name, menu_change, failure, full_screen):
 
 
 def install_Wechat(choose, prom_name, menu_change, failure, full_screen):
-    sleep_time = [60, 10, 10, 10, 20]  # 各图片的等待时间
-    grayscale = [True, True, True, False, False]  # 各图片是否使用灰度搜索
-    skewing = [[0, 0], [0, 0], [-300, 0], [0, 0], [0, 0]]  # x、y坐标偏移
+    sleep_time = [60, 10, 10, 10, 60]  # 各图片的等待时间
+    grayscale = [True, True, False, False, False]  # 各图片是否使用灰度搜索
+    skewing = [[0, 0], [0, 0], [200, 0], [0, 0], [0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), 'app_pkg', 'wechat', 'wechat.exe'))  # 打开指定的安装程序
 
@@ -355,7 +355,7 @@ def install_Wechat(choose, prom_name, menu_change, failure, full_screen):
                               grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='3.png')  # 采用全图片匹配
     if result:
         txt_change(prom_name=prom_name, menu_change=menu_change)
-        system('taskkill /IM WeChat.exe /F')
+        system('taskkill /IM Weixin.exe /F')
     else:
         failure.extend(format_menu(prom_name.split()))
 
@@ -509,15 +509,15 @@ def install_Chrome(prom_name, menu_change):
 
 
 def install_Lensto(choose, prom_name, menu_change, failure, full_screen):
-    sleep_time = [20, 10, 10, 60]  # 各图片的等待时间
-    grayscale = [True, False, False, False]  # 各图片是否使用灰度搜索
-    skewing = [[0, 0], [-300, 0], [0, 0], [0, 0]]  # x、y坐标偏移
+    sleep_time = [20, 10, 10, 10, 60]  # 各图片的等待时间
+    grayscale = [True, True, False, False, False]  # 各图片是否使用灰度搜索
+    skewing = [[0, 0], [0, 0], [-300, 0], [0, 0], [0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", prom_name,
                              prom_name))  # 打开指定的安装程序
-    result = install_from_png(app_name=prom_name, edit_index=1,
+    result = install_from_png(app_name=prom_name, edit_index=2,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
-                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='2.png')  # 采用全图片匹配
+                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='3.png')  # 采用全图片匹配
     if result:
         txt_change(prom_name=prom_name, menu_change=menu_change)
         sleep(2)
@@ -549,33 +549,22 @@ def install_TXvideo(choose, prom_name, menu_change, failure, full_screen):
         failure.extend(format_menu(prom_name.split()))
 
 
-def install_IQIYI(choose, prom_name, menu_change, failure):
-    main_window = ["爱奇艺 安装向导", "win32"]
-    step = {0: ["阅读并同意", 'click', 30],
-            1: ["", 'edit', 6],
-            2: ["立即安装", 'click', 6],
-            3: ["完成", 'click', 90]}
+def install_IQIYI(choose, prom_name, menu_change, failure, full_screen):
+    sleep_time = [20, 10, 10, 40, 10]  # 各图片的等待时间
+    grayscale = [True, True, False, True, True]  # 各图片是否使用灰度搜索
+    skewing = [[-200, 0], [0, 0], [0, 0], [0, 0], [0, 0]]  # x、y坐标偏移
 
-    Application(backend=main_window[1]).start(
-        join(getcwd(), 'app_pkg', prom_name, 'iqiyi_k56008174_107328.exe'))
-    time = 5
-    while time >= 0:
-        try:
-            program = Application(backend=main_window[1]).connect(
-                title_re=main_window[0])  # 直接打开的程序对象不能直接使用需要重新链接
-        except:
-            sleep(1)
-            time -= 1
-        else:
-            if install(main_window=main_window[0], window_backend=main_window[1], step=step,
-                       program=program,
-                       install_path=join(choose, prom_name), edit_value=1):
-                # 安装成功修改menu文件
-                txt_change(prom_name=prom_name, menu_change=menu_change)
-            else:
-                # 安装失败记录安装失败程序
-                failure.extend(format_menu(prom_name.split()))
-            break
+    Application().start(join(getcwd(), 'app_pkg', 'IQIYI', 'IQIYI.exe'))  # 打开指定的安装程序
+
+    png_file_name = "_shot"
+    result = install_from_png(app_name=prom_name, edit_index=0, png_file_name=png_file_name,
+                              confidence=0.8, install_path=choose, sleep_time_list=sleep_time,
+                              grayscale_list=grayscale, skewing_list=skewing, paste_identi=True, full_screen=full_screen, longtime_wait_file_name='3.png')  # 采用全图片匹配
+    if result:
+        txt_change(prom_name=prom_name, menu_change=menu_change)
+        system('taskkill /IM QyClient.exe /F')
+    else:
+        failure.extend(format_menu(prom_name.split()))
 
 
 def install_PSCS3(choose, prom_name, menu_change, failure):
@@ -678,7 +667,7 @@ def install_QQmusic(choose, prom_name, menu_change, failure, full_screen):
                [0, 0], [0, 0], [0, 0]]  # x、y坐标偏移
 
     Application().start(join(getcwd(), "app_pkg", prom_name,
-                             'QQMusic_Setup_2102.exe'))  # 打开指定的安装程序
+                             'QQMusic_Setup_2261.exe'))  # 打开指定的安装程序
 
     result = install_from_png(app_name=prom_name, edit_index=2,
                               confidence=0.8, install_path=choose, sleep_time_list=sleep_time,

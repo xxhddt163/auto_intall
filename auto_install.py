@@ -29,6 +29,7 @@ sys.coinit_flags = 2
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
+        
         super().__init__(parent)
         self.setWindowIcon(QIcon('setup.ico'))
         desktop = QApplication.desktop()

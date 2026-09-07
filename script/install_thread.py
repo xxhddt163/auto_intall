@@ -63,7 +63,7 @@ class New_Thread(QThread):
                     'Chrome': "install_Chrome(prom_name=each, menu_change=menu_change)",
                     'Lensto': "install_Lensto(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'TXvideo': "install_TXvideo(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
-                    'IQIYI': "install_IQIYI(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
+                    'IQIYI': "install_IQIYI(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
                     'PSCS3': "install_PSCS3(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure)",
                     'PSCC2019': "install_PSCC2019(prom_name=each, menu_change=menu_change)",
                     'PRCC2020': "install_PRCC2020(choose=self.path, prom_name=each, menu_change=menu_change, failure=failure, full_screen=self.screen_check)",
